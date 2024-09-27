@@ -9,13 +9,23 @@ let url = apiUrl
 let connectionStatus = true
 
 const fetchUser = async (id) => {
-  const response = await fetch(url + `api/v0/user/id/${id}`);
-  return response.json();
+  try {
+    const response = await fetch(url + `api/v0/user/id/${id}`);
+    console.log(response);
+    return response.json();
+  } catch (error) {
+    return error;
+  }
+  
 }
 
 async function checkUrl(testUrl) {
-  const response = await fetch(testUrl);
-  return response.status === 200
+  try {
+    const response = await fetch(testUrl);
+    return response.ok;
+  } catch (error) {
+    return false;
+  }
 }
 
 const selectUrl = async () => {
