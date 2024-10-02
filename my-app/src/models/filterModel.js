@@ -1,12 +1,22 @@
-export class FilterModel {
+// Create a class that represents the query parameters for a request.
+// The properties will work as filters for the request.
+// The properties should be optional and have a default value.
+
+export class GeneralFilter {
     #beginCreationDate
     #endCreationDate
+
     #beginUpdateDate
     #endUpdateDate
+
     #beginDeleteDate
     #endDeleteDate
-    #statusIDs
-    
+}
 
-    constructor() {}
+export class UserFilter extends GeneralFilter {
+    #username
+    #email
+    #idStatus
+    #idProject
+    #idContact
 }

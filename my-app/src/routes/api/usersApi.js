@@ -1,3 +1,4 @@
+import { UserFilter } from "../../models/filterModel.js";
 import { UserCreate, UserModel, UserUpdate } from "../../models/userModels.js";
 import { Optional } from "../../tools/optional.js";
 import { api } from "./requestsApi.js";
@@ -5,6 +6,7 @@ import { api } from "./requestsApi.js";
 export class UsersApi{
     #api
     #route
+
     /** 
      * @param {api} api 
     */
@@ -95,12 +97,12 @@ export class UsersApi{
         return response;
     }
     /** Get all users
-     * @param {Object} queryParams 
+     * @param {UserFilter} queryParams 
      * 
      * @returns {Promise<Response>} Json body -> UserModel
      */
     async getAll(queryParams) {
-        const response = await this.#get("");
+        const response = await this.#get("", [], queryParams);
 
         return response;
     }
@@ -126,6 +128,27 @@ export class UsersApi{
 
         return response;
     }
+    /** Update a user by status ID
+     * 
+     * @param {string} id 
+     * @param {UserUpdate} user 
+     * @returns {Promise<Response>} Json body -> UserModel
+     */
+    async updateByStatusID(id, user) {
+        const response = await this.#put("id-status/", user, [id]);
+
+        return response;
+    }
+    /** Update all users
+     * @param {UserFilter} queryParams 
+     * 
+     * @returns {Promise<Response>} Json body -> UserModel
+     */
+    async updateAll(user, queryParams) {
+        const response = await this.#put("", user, [], queryParams);
+
+        return response;
+    }
 
     /** Delete a user by ID
      * 
@@ -147,8 +170,13 @@ export class UsersApi{
 
         return response;
     }
-    async deleteAll() {
-        const response = await this.#delete("");
+    /** Delete all users
+     * @param {UserFilter} queryParams 
+     * 
+     * @returns {Promise<Response>} Json body -> UserModel
+     */
+    async deleteAll(queryParams) {
+        const response = await this.#delete("", [], queryParams);
 
         return response;
     }
