@@ -29,10 +29,7 @@ async function checkUrl(testUrl) {
 }
 
 const selectUrl = async () => {
-  if (await checkUrl(apiUrl)) {
-    url = apiUrl;
-  }
-  else if (await checkUrl(localUrl)) {
+  if (await checkUrl(localUrl)) {
     url = localUrl;
   }
   

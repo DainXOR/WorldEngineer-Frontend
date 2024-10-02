@@ -2,6 +2,7 @@ import banner from './assets/banner.jpg';
 import styles from './App.module.css';
 
 import Nav from './components/Nav.jsx';
+import Example from './components/Example';
 
 function App() {
   return (
