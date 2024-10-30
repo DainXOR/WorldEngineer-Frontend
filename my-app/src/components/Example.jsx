@@ -1,8 +1,5 @@
 import { createSignal, createResource, Switch, Match, Show } from "solid-js";
 
-import logo from '../logo.svg'
-import styles from '../App.module.css';
-
 const apiUrl = "https://sjvf78xp-8080.use2.devtunnels.ms/"
 const localUrl = "http://127.0.0.1:8080/"
 let url = apiUrl
@@ -69,14 +66,12 @@ function Example() {
   }
 
   return (
-    <div class={styles.App}>
-      <header class={styles.header}>
-        <img src={logo} class={styles.logo} alt="logo" />
+    <div>
+      <header>
         <p>
           Edit <code>src/App.jsx</code> and save to reload.
         </p>
         <a
-          class={styles.link}
           href="https://github.com/solidjs/solid"
           target="_blank"
           rel="noopener noreferrer"

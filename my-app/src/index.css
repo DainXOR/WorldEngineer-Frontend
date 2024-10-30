@@ -9,35 +9,13 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  background-color: #0a1119;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-}
-
-.nav{
-  display: flex;
-  flex-direction: row;
-
-  width: 100%;
-  margin: 0;
-  padding: 1rem;
-  gap: 2rem;
-
-
-  font-size: 20px;
-  font-weight: bold;
-}
-
-.nav-dark{
-  background-color: #07020d !important;
-  color: white;
-  
-}
-.nav-light{
-  background-color: white !important;
-  color: #07020d;
 }
 
 .nav-item{

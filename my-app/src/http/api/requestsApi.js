@@ -1,14 +1,16 @@
 import { Optional } from "../../tools/optional"
 
 export class api {
-    #apiUrl
+    #baseUrl
     #localUrl
+    #apiUrl
     #url
     #connectionStatus
 
-    constructor() {
-        this.#apiUrl = "https://sjvf78xp-8080.use2.devtunnels.ms/"
-        this.#localUrl = "http://127.0.0.1:8080/"
+    constructor(url, fallbackUrl, apiRoute = "api/v0/") {
+        this.#baseUrl = url
+        this.#localUrl = fallbackUrl
+        this.#apiUrl = apiRoute
         this.#url
         this.#connectionStatus
     }
@@ -33,12 +35,12 @@ export class api {
      */
     async connect() {
         this.#connectionStatus = true;
-        if (await checkUrl(this.#apiUrl)) {
-            this.#url = this.#apiUrl;
+        if (await this.checkUrl(this.#baseUrl)) {
+            this.#url = this.#baseUrl + this.#apiUrl;
             return true;
         }
-        else if (await checkUrl(this.#localUrl)) {
-            this.#url = this.#localUrl;
+        else if (await this.checkUrl(this.#localUrl)) {
+            this.#url = this.#localUrl + this.#apiUrl;
             return true;
         }
         else {
@@ -62,23 +64,28 @@ export class api {
      * @param {Optional} pathParams Use Optional to wrap string[]
      * @param {Optional} queryParams Use Optional to wrap Object
      * @param {Optional} body Use Optional to wrap Object
-     * @returns {Promise<Object>}
+     * @returns {Promise<Response>}
      */
     async request(method, path, pathParams, queryParams, body) {
+        let requestJson = {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+
+        if (method !== 'GET') {
+            requestJson.body = JSON.stringify(body.getOrDefault({}));
+        }
+
         const response = await fetch(
-            this.#url + 
-            path + 
+            this.#url + path + 
             pathParams.transformOrDefault(arr => arr.join('/'), '') +
             queryParams.transformOrDefault(d => d.length > 0 ? "/?" + Object.keys(d).map(k => k + '=' + d[k]).join('&') : '', ''), 
-            {
-                method: method,
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(body.getOrDefault({}))
-            }
+            requestJson
         );
-        return response.json();
+
+        return response;
     }
 
     /** Get a resource
@@ -86,10 +93,10 @@ export class api {
      * @param {string} path 
      * @param {Optional} pathParams Use Optional to wrap string[]
      * @param {Optional} queryParamsDict Use Optional to wrap Object
-     * @returns {Promise<Object>}
+     * @returns {Promise<Response>}
      */
     async get(path, pathParams = Optional.empty(), queryParamsDict = Optional.empty()) {
-        return this.request('GET', path, pathParams, queryParamsDict, {});
+        return this.request('GET', path, pathParams, queryParamsDict, Optional.empty());
     }
 
     /** Create a new resource
@@ -98,7 +105,7 @@ export class api {
      * @param {Optional} pathParams Use Optional to wrap string[]
      * @param {Optional} queryParamsDict Use Optional to wrap Object
      * @param {Optional} body Use Optional to wrap Object
-     * @returns {Promise<Object>}
+     * @returns {Promise<Response>}
      */
     async post(path, pathParams = Optional.empty(), queryParamsDict = Optional.empty(), body = Optional.empty()) {
         return this.request('POST', path, pathParams, queryParamsDict, body);
@@ -121,7 +128,7 @@ export class api {
      * @param {string} path 
      @param {Optional} pathParams Use Optional to wrap string[]
      * @param {Optional} queryParamsDict Use Optional to wrap Object
-     * @returns {Promise<Object>}
+     * @returns {Promise<Response>}
      */
     async delete(path, pathParams = Optional.empty(), queryParamsDict = Optional.empty()) {
         return this.request('DELETE', path, pathParams, queryParamsDict, {});

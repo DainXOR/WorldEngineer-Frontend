@@ -1,0 +1,12 @@
+function ProjectsPage() {
+  return (
+    <div>
+        <NavBar />
+        <SideBar />
+        <h1>Projects</h1>
+        <p>Here are some of the projects I've worked on.</p>
+    </div>
+  );
+}
+
+export default ProjectsPage;
