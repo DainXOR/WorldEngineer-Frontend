@@ -6,7 +6,6 @@ import './index.css';
 import App from './App';
 import HomePage from './pages/Home'
 import SignPage from './pages/Sign'
-import RegisterPage from './pages/Register'
 import ProjectsPage from './pages/Projects'
 import NotFoundPage from './pages/NotFound';
 import Example from "./components/Example";
@@ -26,14 +25,14 @@ import { UsersApi } from './http/api/usersApi';
 // }
 
 const backApi = new api(
-  "https://sjvf78xp-8080.use2.devtunnels.ms/", 
-  "http://localhost:8080/", 
-  "api/v0/"
+  "https://sjvf78xp-8080.use2.devtunnels.ms", 
+  "http://localhost:8080", 
+  "api/v0"
 );
 const proxyApi = new api(
-  "https://sjvf78xp-8080.use2.devtunnels.ms/", 
-  "http://localhost:6969/", 
-  "api/v0/"
+  "https://sjvf78xp-8080.use2.devtunnels.ms", 
+  "http://localhost:6969", 
+  "api/v0"
 );
 
 UsersApi.init(backApi);

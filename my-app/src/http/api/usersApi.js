@@ -15,7 +15,7 @@ export class UsersApi{
     */
     static init(apiObject){
         UsersApi.#api = apiObject;
-        UsersApi.#route = "user/";
+        UsersApi.#route = "user";
     }
 
     /** Private get method
@@ -30,7 +30,7 @@ export class UsersApi{
         const optionalPathParams = Optional.from(() => pathParams.length > 0 ? pathParams : null);
         const optionalQueryParams = Optional.from(() => queryParams.length > 0 ? queryParams : null);
 
-        return UsersApi.#api.get(UsersApi.#route + path, optionalPathParams, optionalQueryParams);
+        return UsersApi.#api.get(UsersApi.#route + "/" + path, optionalPathParams, optionalQueryParams);
     }
     /** Private post method
      * 
@@ -46,7 +46,7 @@ export class UsersApi{
         const optionalPathParams = Optional.from(() => pathParams.length > 0 ? pathParams : null);
         const optionalQueryParams = Optional.from(() => queryParams.length > 0 ? queryParams : null);
 
-        return UsersApi.#api.post(UsersApi.#route + path, optionalPathParams, optionalQueryParams, optionalBody);
+        return UsersApi.#api.post(UsersApi.#route + "/" + path, optionalPathParams, optionalQueryParams, optionalBody);
     }
     /** Private put method
      * 
@@ -62,7 +62,7 @@ export class UsersApi{
         const optionalPathParams = Optional.from(() => pathParams.length > 0 ? pathParams : null);
         const optionalQueryParams = Optional.from(() => queryParams.length > 0 ? queryParams : null);
 
-        return UsersApi.#api.put(UsersApi.#route + path, optionalPathParams, optionalQueryParams, optionalBody);
+        return UsersApi.#api.put(UsersApi.#route + "/" + path, optionalPathParams, optionalQueryParams, optionalBody);
     }
     /** Private delete method
      * 
@@ -76,7 +76,7 @@ export class UsersApi{
         const optionalPathParams = Optional.from(() => pathParams.length > 0 ? pathParams : null);
         const optionalQueryParams = Optional.from(() => queryParams.length > 0 ? queryParams : null);
 
-        return UsersApi.#api.delete(UsersApi.#route + path, optionalPathParams, optionalQueryParams);
+        return UsersApi.#api.delete(UsersApi.#route + "/" + path, optionalPathParams, optionalQueryParams);
     }
 
     /** Get a user by ID

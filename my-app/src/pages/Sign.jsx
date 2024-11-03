@@ -2,9 +2,11 @@ import { Show, Switch, Match, createSignal } from 'solid-js';
 import { useNavigate } from "@solidjs/router";
 
 import EmailForm from "../components/EmailForm";
-import Form from "../components/Form";
+import CodeForm from "../components/CodeForm";
 
 import { AuthApi } from "../http/api/authApi";
+import { UsersApi } from "../http/api/usersApi";
+import { UserCreate, UserModel } from "../models/userModels";
 
 const LogStep = {
     EMAIL: 0,
@@ -19,8 +21,10 @@ const LogType = {
 function SignPage() {
     const [logStep, setLogStep] = createSignal(LogStep.EMAIL);
     const [logType, setLogType] = createSignal(LogType.LOG_IN);
+    const [email, setEmail] = createSignal("");
     const authApi = new AuthApi();
-    // const navigate = useNavigate();
+    const usersApi = new UsersApi();
+    const navigate = useNavigate();
 
     const onLogInSubmit = async (email) => {
         const result = await authApi.login(email);
@@ -28,20 +32,63 @@ function SignPage() {
         if (!result.ok) {
             console.log("Error with login");
             console.log(result);
+            return;
         }
         
+        setEmail(email);
         setLogStep(LogStep.AUTH);
     }
     const onSignUpSubmit = async (email) => {
-        const result = await authApi.login(email);
+        const result = await authApi.register(email);
 
         if (!result.ok) {
             console.log("Error with login");
             console.log(result);
+            return;
         }
         
+        setEmail(email);
         setLogStep(LogStep.AUTH);
     }
+    const onCodeSubmit = async (code) => {
+        const result = await authApi.authenticate(email(), code);
+
+        if (!result.ok) {
+            console.log("Error with login");
+            console.log(result);
+            return;
+        }
+        
+        if (logType() === LogType.SIGN_UP) {
+            setLogStep(LogStep.REGISTER);
+
+        } else {
+            const userId = (await result.json())
+            console.log(userId);
+            
+            const user = await usersApi.getByID("1");
+            console.log(user);
+            // navigate("/");
+        }
+    }
+    const onRegisterSubmit = async (user) => {
+        let newUser = new UserCreate();
+        newUser.email = email();
+        newUser.username = user.username;
+
+        const result = await usersApi.create(user);
+
+        if (!result.ok) {
+            console.log("Error with login");
+            console.log(result);
+            return;
+            // navigate("/");
+        }
+        else {
+            // navigate("/");
+        }
+    }
+
     
     return (
         <div class="gap-4">
@@ -62,7 +109,7 @@ function SignPage() {
                         </Switch>
                     </Match>
                     <Match when={logStep() === LogStep.AUTH}>
-                        <Form/>
+                        <CodeForm submitText="Send Code" onSubmit={onCodeSubmit}/>
                     </Match>
                     <Match when={logStep() === LogStep.REGISTER}>
                         

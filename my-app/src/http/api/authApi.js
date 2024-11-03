@@ -1,6 +1,7 @@
 import { api } from "./requestsApi.js";
 
 import { Optional } from "../../tools/optional";
+import { isEmpty } from "../../tools/object.js";
 
 export class AuthApi {
     /** @type {api} */
@@ -16,7 +17,7 @@ export class AuthApi {
      */
     static init(apiObject){
         AuthApi.#api = apiObject;
-        AuthApi.#route = "auth/";
+        AuthApi.#route = "auth";
     }
 
     /** Private get method
@@ -29,9 +30,9 @@ export class AuthApi {
      */
     async #get(path, pathParams = [], queryParams = {}) {
         const optionalPathParams = Optional.from(() => pathParams.length > 0 ? pathParams : null);
-        const optionalQueryParams = Optional.from(() => queryParams.length > 0 ? queryParams : null);
+        const optionalQueryParams = Optional.from(() => !isEmpty(queryParams) ? queryParams : null);
 
-        return AuthApi.#api.get(AuthApi.#route + path, optionalPathParams, optionalQueryParams);
+        return AuthApi.#api.get(AuthApi.#route + "/" + path, optionalPathParams, optionalQueryParams);
     }
 
     /** Private post method
@@ -44,11 +45,11 @@ export class AuthApi {
      * @returns {Promise<AuthModel>}
      */
     async #post(path, body, pathParams = [], queryParams = {}) {
-        const optionalBody = Optional.from(() => body.length ? body : null);
+        const optionalBody = Optional.from(() => !isEmpty(queryParams) ? body : null);
         const optionalPathParams = Optional.from(() => pathParams.length > 0 ? pathParams : null);
-        const optionalQueryParams = Optional.from(() => queryParams.length > 0 ? queryParams : null);
+        const optionalQueryParams = Optional.from(() => !isEmpty(queryParams) ? queryParams : null);
 
-        return AuthApi.#api.post(AuthApi.#route + path, optionalPathParams, optionalQueryParams, optionalBody);
+        return AuthApi.#api.post(AuthApi.#route + "/" + path, optionalPathParams, optionalQueryParams, optionalBody);
     }
 
     /** Private put method
@@ -61,11 +62,11 @@ export class AuthApi {
      * @returns {Promise<AuthModel>}
      */
     async #put(path, body, pathParams = [], queryParams = {}) {
-        const optionalBody = Optional.from(() => body.length ? body : null);
+        const optionalBody = Optional.from(() => !isEmpty(queryParams) ? body : null);
         const optionalPathParams = Optional.from(() => pathParams.length > 0 ? pathParams : null);
-        const optionalQueryParams = Optional.from(() => queryParams.length > 0 ? queryParams : null);
+        const optionalQueryParams = Optional.from(() => !isEmpty(queryParams) > 0 ? queryParams : null);
 
-        return AuthApi.#api.put(AuthApi.#route + path, optionalPathParams, optionalQueryParams, optionalBody);
+        return AuthApi.#api.put(AuthApi.#route + "/" + path, optionalPathParams, optionalQueryParams, optionalBody);
     }   
 
     /** Private delete method
@@ -78,9 +79,9 @@ export class AuthApi {
      */
     async #delete(path, pathParams = [], queryParams = {}) {
         const optionalPathParams = Optional.from(() => pathParams.length > 0 ? pathParams : null);
-        const optionalQueryParams = Optional.from(() => queryParams.length > 0 ? queryParams : null);
+        const optionalQueryParams = Optional.from(() => !isEmpty(queryParams) ? queryParams : null);
 
-        return AuthApi.#api.delete(AuthApi.#route + path, optionalPathParams, optionalQueryParams);
+        return AuthApi.#api.delete(AuthApi.#route + "/" + path, optionalPathParams, optionalQueryParams);
     }
 
     /** Register a new user
@@ -91,7 +92,7 @@ export class AuthApi {
      * 
      */
     async register(email) {
-        return this.#get("register/", [email]);
+        return this.#get("register", [email]);
     }
 
     /** Login a user
@@ -102,7 +103,7 @@ export class AuthApi {
      * 
      */
     async login(email) {
-        return this.#get("login/", [email]);
+        return this.#get("login", [email]);
     }
 
     /** Authenticate a user
@@ -113,6 +114,6 @@ export class AuthApi {
      * 
      */
     async authenticate(email, code) {
-        return this.#get("auth/", [email], {"token": code});
+        return this.#get("verify", [email], {"token": code});
     }
 }

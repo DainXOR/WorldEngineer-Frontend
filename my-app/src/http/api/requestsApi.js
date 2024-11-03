@@ -1,16 +1,17 @@
+import { isEmpty } from "../../tools/object";
 import { Optional } from "../../tools/optional"
 
 export class api {
     #baseUrl
-    #localUrl
-    #apiUrl
+    #fallbackUrl
+    #apiPath
     #url
     #connectionStatus
 
-    constructor(url, fallbackUrl, apiRoute = "api/v0/") {
+    constructor(url, fallbackUrl, apiRoute) {
         this.#baseUrl = url
-        this.#localUrl = fallbackUrl
-        this.#apiUrl = apiRoute
+        this.#fallbackUrl = fallbackUrl
+        this.#apiPath = apiRoute
         this.#url
         this.#connectionStatus
     }
@@ -36,11 +37,11 @@ export class api {
     async connect() {
         this.#connectionStatus = true;
         if (await this.checkUrl(this.#baseUrl)) {
-            this.#url = this.#baseUrl + this.#apiUrl;
+            this.#url = this.#baseUrl + "/" + this.#apiPath;
             return true;
         }
-        else if (await this.checkUrl(this.#localUrl)) {
-            this.#url = this.#localUrl + this.#apiUrl;
+        else if (await this.checkUrl(this.#fallbackUrl)) {
+            this.#url = this.#fallbackUrl + "/" + this.#apiPath;
             return true;
         }
         else {
@@ -78,10 +79,16 @@ export class api {
             requestJson.body = JSON.stringify(body.getOrDefault({}));
         }
 
-        const response = await fetch(
-            this.#url + path + 
+        const requestUrl = (this.#url + "/" + path + "/" +  
             pathParams.transformOrDefault(arr => arr.join('/'), '') +
-            queryParams.transformOrDefault(d => d.length > 0 ? "/?" + Object.keys(d).map(k => k + '=' + d[k]).join('&') : '', ''), 
+            queryParams.transformOrDefault(d => !isEmpty(d) ? "?" + Object.keys(d).map(k => k + '=' + d[k]).join('&') : '', ''))
+            .replace("/?", "?");
+
+        console.log(pathParams);
+        console.log(requestUrl);
+        
+        const response = await fetch(
+            requestUrl,
             requestJson
         );
 
