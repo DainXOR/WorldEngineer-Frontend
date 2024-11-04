@@ -6,7 +6,9 @@ import CodeForm from "../components/CodeForm";
 
 import { AuthApi } from "../http/api/authApi";
 import { UsersApi } from "../http/api/usersApi";
+import { UtilsApi } from "../http/api/utilsApi";
 import { UserCreate, UserModel } from "../models/userModels";
+import UserForm from "../components/UserForm";
 
 const LogStep = {
     EMAIL: 0,
@@ -26,6 +28,10 @@ function SignPage() {
     const usersApi = new UsersApi();
     const navigate = useNavigate();
 
+    /**
+     * @param {string} email
+     * @returns {void}
+     * */
     const onLogInSubmit = async (email) => {
         const result = await authApi.login(email);
 
@@ -38,6 +44,10 @@ function SignPage() {
         setEmail(email);
         setLogStep(LogStep.AUTH);
     }
+    /**
+     * @param {string} email
+     * @returns {void}
+     * */
     const onSignUpSubmit = async (email) => {
         const result = await authApi.register(email);
 
@@ -50,6 +60,10 @@ function SignPage() {
         setEmail(email);
         setLogStep(LogStep.AUTH);
     }
+    /**
+     * @param {string} code
+     * @returns {void}
+     * */
     const onCodeSubmit = async (code) => {
         const result = await authApi.authenticate(email(), code);
 
@@ -71,10 +85,19 @@ function SignPage() {
             // navigate("/");
         }
     }
+    /** 
+     * @param {UserCreate} user
+     * @returns {void}
+     * */
     const onRegisterSubmit = async (user) => {
-        let newUser = new UserCreate();
-        newUser.email = email();
-        newUser.username = user.username;
+        user.email = email();
+
+        const usernameValid = UtilsApi.checkUsername(user.username);
+        const nametagValid = UtilsApi.checkNameTag(user.name_tag);
+        if (!((await usernameValid) && (await nametagValid))) {
+            console.log("Error with login");
+            return;
+        }
 
         const result = await usersApi.create(user);
 
@@ -112,6 +135,7 @@ function SignPage() {
                         <CodeForm submitText="Send Code" onSubmit={onCodeSubmit}/>
                     </Match>
                     <Match when={logStep() === LogStep.REGISTER}>
+                        <UserForm submitText="Register" onSubmit={onRegisterSubmit}/>
                         
                     </Match>
                 </Switch>

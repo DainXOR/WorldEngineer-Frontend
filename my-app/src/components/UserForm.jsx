@@ -1,36 +1,47 @@
 import { createSignal, createEffect } from "solid-js";
 import { AuthApi } from "../http/api/authApi";
+import { UtilsApi } from "../http/api/utilsApi";
+import { UserCreate } from "../models/userModels";
 
-function isUsernameValid(Username) {
-  return /^[0-9]{6}$/.test(Username);
-}
-function generateNameTag(username) {
-  return username + Math.floor(Math.random() * 1000);
-}
-function checkNameTag(nameTag) {
-  return nameTag.length > 0;
-}
+const initUsername = (await UtilsApi.createUsername());
+const initNameTag = (await UtilsApi.createNameTag(initUsername));
 
 function UserForm(props) {
-  const [username, setUsername] = createSignal('');
-  const [nameTag, setNameTag] = createSignal('');
-  const [usernameValid, setUsernameValid] = createSignal(false);
+  const [username, setUsername] = createSignal(initUsername);
+  const [nameTag, setNameTag] = createSignal(initNameTag);
+  const [usernameDependant, setUsernameDependant] = createSignal(true);
 
-  function handleUsernameChange(event) {
+  async function handleUsernameChange(event) {
     setUsername(event.target.value);
-    setNameTag(generateNameTag(username()));
+
+    if (usernameDependant()) {
+      setNameTag(await UtilsApi.createNameTag(username()));
+    }
   }
-  function handleNameTagChange(event) {
-    setNameTag(event.target.value);
+  async function handleNameTagChange(event) {
+    if (event.target.value.length > 0) {
+      setUsernameDependant(false);
+      setNameTag(event.target.value);
+    }
+    else {
+      setUsernameDependant(true);
+      setNameTag((await UtilsApi.createNameTag(initUsername)));
+    }
+    
   }
+  
   async function handleSubmit(event) {
     event.preventDefault();
-    props.onSubmit(username());
-  }
 
-  createEffect(() => {
-    setUsernameValid(isUsernameValid(username()));
-  });
+    let newUser = UserCreate.of(
+      username(),
+      nameTag(),
+      ""
+    );
+    
+    props.onSubmit(newUser);
+  }
+  
 
   return (
     <>

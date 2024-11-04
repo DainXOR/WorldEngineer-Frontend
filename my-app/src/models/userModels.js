@@ -27,18 +27,26 @@ export class UserModel {
 
 export class UserCreate {
 	username;
+    name_tag;
 	email;
 
-    of(username, email) {
+    static of(username, name_tag, email) {
         if (username === undefined || username === null) {
             throw new Error("username is required");
+        }
+        if (name_tag === undefined || name_tag === null) {
+            throw new Error("name_tag is required");
         }
         if (email === undefined || email === null) {
             throw new Error("email is required");
         }
         
-        this.username = username;
-        this.email = email;
+        let user = new UserCreate();
+        user.username = username;
+        user.name_tag = name_tag;
+        user.email = email;
+        
+        return user;
     }
 }
 

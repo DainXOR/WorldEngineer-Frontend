@@ -109,6 +109,7 @@ export class AuthApi {
     /** Authenticate a user
      * 
      * @param {string} email
+     * @param {string} code
      * 
      * @returns {Promise<Response>}
      * 
