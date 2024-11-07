@@ -1,9 +1,9 @@
-import NavBar from "./NavBar";
+import NavBarHome from "./NavBarHome";
 
 function MainFrame(props) {
     return (
         <div class="flex flex-col h-screen">
-        <NavBar />
+        <NavBarHome />
         <div class="flex-1 overflow-y-auto">
             {props.children}
         </div>

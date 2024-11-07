@@ -1,6 +1,6 @@
 import banner from './assets/banner.jpg';
 
-import NavBar from './components/NavBar.jsx';
+import NavBarHome from './components/NavBarHome.jsx';
 import Example from './components/Example';
 import SideBar from "./components/SideBar";
 

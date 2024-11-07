@@ -77,12 +77,14 @@ function SignPage() {
             setLogStep(LogStep.REGISTER);
 
         } else {
-            const userId = (await result.json())
-            console.log(userId);
+            console.log(result);
             
-            const user = await usersApi.getByID("1");
+            const user = (await result.json());
             console.log(user);
-            // navigate("/");
+            
+            localStorage.setItem("user_id", user.id);
+            user.name_tag = user.name_tag.replace("#", "%23");
+            navigate("/" + user.name_tag + "/projects");
         }
     }
     /** 
@@ -90,25 +92,28 @@ function SignPage() {
      * @returns {void}
      * */
     const onRegisterSubmit = async (user) => {
-        user.email = email();
+        const [validUsername, validNameTag] = await Promise.all([
+                UtilsApi.checkUsername(user.username), 
+                UtilsApi.checkNameTag(user.name_tag)
+            ]);
 
-        const usernameValid = UtilsApi.checkUsername(user.username);
-        const nametagValid = UtilsApi.checkNameTag(user.name_tag);
-        if (!((await usernameValid) && (await nametagValid))) {
-            console.log("Error with login");
+        if (!validUsername || !validNameTag) {
             return;
         }
 
+        user.email = email();
         const result = await usersApi.create(user);
 
         if (!result.ok) {
             console.log("Error with login");
             console.log(result);
             return;
-            // navigate("/");
         }
         else {
-            // navigate("/");
+            const user = (await result.json());
+
+            localStorage.setItem("user_id", user.id);
+            navigate("/" + user.name_tag + "/projects");
         }
     }
 

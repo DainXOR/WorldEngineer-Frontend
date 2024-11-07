@@ -6,20 +6,20 @@ import SideBar from '../components/SideBar';
 import { UsersApi } from "../http/api/usersApi";
 
 
-function ProjectsPage(props) {
+function ProfilePage(props) {
+
   const path = props.location.pathname;
   const [user, {mutate, refetch}] = createResource(async () => (await UsersApi.getByID(localStorage.getItem("user_id"))).json());
-  
 
   return (
     <div>
-        <NavBarPersonal user={user()}/>
+        <NavBarPersonal user={user()} />
         <SideBar />
         
-        <h1>Projects</h1>
-        <p>Here are some of the projects I've worked on.</p>
+        <h1>Profile</h1>
+        <p>My profile</p>
     </div>
   );
 }
 
-export default ProjectsPage;
+export default ProfilePage;

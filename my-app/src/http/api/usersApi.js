@@ -1,5 +1,6 @@
 import { UserFilter } from "../../models/filterModel.js";
 import { UserCreate, UserModel, UserUpdate } from "../../models/userModels.js";
+import { isEmpty } from "../../tools/object.js";
 import { Optional } from "../../tools/optional.js";
 import { api } from "./requestsApi.js";
 
@@ -26,9 +27,9 @@ export class UsersApi{
      * 
      * @returns {Promise<UserModel>}
      */
-    async #get(path, pathParams = [], queryParams = {}) {
+    static async #get(path, pathParams = [], queryParams = {}) {
         const optionalPathParams = Optional.from(() => pathParams.length > 0 ? pathParams : null);
-        const optionalQueryParams = Optional.from(() => queryParams.length > 0 ? queryParams : null);
+        const optionalQueryParams = Optional.from(() => !isEmpty(queryParams) > 0 ? queryParams : null);
 
         return UsersApi.#api.get(UsersApi.#route + "/" + path, optionalPathParams, optionalQueryParams);
     }
@@ -41,10 +42,10 @@ export class UsersApi{
      * 
      * @returns {Promise<UserModel>}
      */
-    async #post(path, body, pathParams = [], queryParams = {}) {
-        const optionalBody = Optional.from(() => body.length ? body : null);
+    static async #post(path, body, pathParams = [], queryParams = {}) {
+        const optionalBody = Optional.from(() => !isEmpty(body) ? body : null);
         const optionalPathParams = Optional.from(() => pathParams.length > 0 ? pathParams : null);
-        const optionalQueryParams = Optional.from(() => queryParams.length > 0 ? queryParams : null);
+        const optionalQueryParams = Optional.from(() => !isEmpty(queryParams) ? queryParams : null);
 
         return UsersApi.#api.post(UsersApi.#route + "/" + path, optionalPathParams, optionalQueryParams, optionalBody);
     }
@@ -57,10 +58,10 @@ export class UsersApi{
      * 
      * @returns {Promise<UserModel>}
      */
-    async #put(path, body, pathParams = [], queryParams = {}) {
-        const optionalBody = Optional.from(() => body.length ? body : null);
+    static async #put(path, body, pathParams = [], queryParams = {}) {
+        const optionalBody = Optional.from(() => !isEmpty(body) ? body : null);
         const optionalPathParams = Optional.from(() => pathParams.length > 0 ? pathParams : null);
-        const optionalQueryParams = Optional.from(() => queryParams.length > 0 ? queryParams : null);
+        const optionalQueryParams = Optional.from(() => !isEmpty(queryParams) ? queryParams : null);
 
         return UsersApi.#api.put(UsersApi.#route + "/" + path, optionalPathParams, optionalQueryParams, optionalBody);
     }
@@ -72,9 +73,9 @@ export class UsersApi{
      * 
      * @returns {Promise<UserModel>}
      */
-    async #delete(path, pathParams = [], queryParams = {}) {
+    static async #delete(path, pathParams = [], queryParams = {}) {
         const optionalPathParams = Optional.from(() => pathParams.length > 0 ? pathParams : null);
-        const optionalQueryParams = Optional.from(() => queryParams.length > 0 ? queryParams : null);
+        const optionalQueryParams = Optional.from(() => !isEmpty(queryParams) ? queryParams : null);
 
         return UsersApi.#api.delete(UsersApi.#route + "/" + path, optionalPathParams, optionalQueryParams);
     }
@@ -84,10 +85,8 @@ export class UsersApi{
      * @param {string} id 
      * @returns {Promise<Response>} Json body -> UserModel
      */
-    async getByID(id) {
-        const response = await this.#get("id/", [id]);
-            
-        return response;
+    static async getByID(id) {
+        return UsersApi.#get("id", [id]);
     }
     /** Get a user by status ID
      * 
@@ -95,7 +94,7 @@ export class UsersApi{
      * @returns {Promise<Response>} Json body -> UserModel
      */
     async getByStatusID(id) {
-        const response = await this.#get("id-status/", [id]);
+        const response = await UsersApi.#get("id-status", [id]);
 
         return response;
     }
@@ -105,7 +104,7 @@ export class UsersApi{
      * @returns {Promise<Response>} Json body -> UserModel
      */
     async getAll(queryParams) {
-        const response = await this.#get("", [], queryParams);
+        const response = await UsersApi.#get("", [], queryParams);
 
         return response;
     }
@@ -116,7 +115,7 @@ export class UsersApi{
      * @returns {Promise<Response>} Json body -> UserModel
      */
     async create(user) {
-        const response = await this.#post("", user);
+        const response = await UsersApi.#post("", user);
 
         return response;
     }
@@ -127,7 +126,7 @@ export class UsersApi{
      * @returns {Promise<Response>} Json body -> UserModel
      */
     async updateById(id, user) {
-        const response = await this.#put("id/", user, [id]);
+        const response = await UsersApi.#put("id", user, [id]);
 
         return response;
     }
@@ -138,7 +137,7 @@ export class UsersApi{
      * @returns {Promise<Response>} Json body -> UserModel
      */
     async updateByStatusID(id, user) {
-        const response = await this.#put("id-status/", user, [id]);
+        const response = await UsersApi.#put("id-status", user, [id]);
 
         return response;
     }
@@ -148,7 +147,7 @@ export class UsersApi{
      * @returns {Promise<Response>} Json body -> UserModel
      */
     async updateAll(user, queryParams) {
-        const response = await this.#put("", user, [], queryParams);
+        const response = await UsersApi.#put("", user, [], queryParams);
 
         return response;
     }
@@ -159,7 +158,7 @@ export class UsersApi{
      * @returns {Promise<Response>} Json body -> UserModel
      */
     async deleteByID(id) {
-        const response = await this.#delete("id/", [id]);
+        const response = await UsersApi.#delete("id", [id]);
 
         return response;
     }
@@ -169,7 +168,7 @@ export class UsersApi{
      * @returns {Promise<Response>} Json body -> UserModel
      */
     async deleteByStatusID(id) {
-        const response = await this.#delete("id-status/", [id]);
+        const response = await UsersApi.#delete("id-status", [id]);
 
         return response;
     }
@@ -179,7 +178,7 @@ export class UsersApi{
      * @returns {Promise<Response>} Json body -> UserModel
      */
     async deleteAll(queryParams) {
-        const response = await this.#delete("", [], queryParams);
+        const response = await UsersApi.#delete("", [], queryParams);
 
         return response;
     }

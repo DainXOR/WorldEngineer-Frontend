@@ -2,7 +2,7 @@ import { A } from "@solidjs/router";
 
 import logo from '../assets/logo_transparent.png';
 
-function NavBar(props) {
+function NavBarHome(props) {
 
   return (
     <nav class="fixed flex flex-row w-full m-0 p-4 gap-8 text-xl font-bold bg-we-blue-950 text-white">
@@ -24,4 +24,4 @@ function NavBar(props) {
   );
 }
 
-export default NavBar;
+export default NavBarHome;

@@ -1,7 +1,8 @@
-function SideBar() {
+function SideBar(props) {
+
   return (
     <div>
-      <h1>SideBar</h1>
+      <h1>Side Bar</h1>
     </div>
   );
 }

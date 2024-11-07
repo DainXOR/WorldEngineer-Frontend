@@ -7,6 +7,7 @@ import App from './App';
 import HomePage from './pages/Home'
 import SignPage from './pages/Sign'
 import ProjectsPage from './pages/Projects'
+import ProfilePage from './pages/Profile'
 import NotFoundPage from './pages/NotFound';
 import Example from "./components/Example";
 
@@ -15,6 +16,7 @@ import Redirect from './components/Redirect';
 import { api } from './http/api/requestsApi';
 import { AuthApi } from './http/api/authApi';
 import { UsersApi } from './http/api/usersApi';
+import { UtilsApi } from "./http/api/utilsApi";
 
 // const root = document.getElementById('root');
 
@@ -37,10 +39,15 @@ const proxyApi = new api(
 
 UsersApi.init(backApi);
 AuthApi.init(backApi);
+UtilsApi.init(backApi);
 
 const connectionResult = await backApi.connect();
 
 console.log('backApi:', connectionResult);
+
+//let res = await UtilsApi.checkUsername("MancersDhiskey#123456")
+//console.log(res);
+
 
 render(() => 
   (
@@ -49,6 +56,7 @@ render(() =>
       <Route path="/home" component={HomePage} />
       <Route path="/sign" component={SignPage} />
       <Route path="/:nameTag/projects" component={ProjectsPage} />
+      <Route path="/:nameTag/profile" component={ProfilePage} />
       <Route path="/test" component={Example} />
       
     </Router>
