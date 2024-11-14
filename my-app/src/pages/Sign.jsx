@@ -9,6 +9,7 @@ import { UsersApi } from "../http/api/usersApi";
 import { UtilsApi } from "../http/api/utilsApi";
 import { UserCreate, UserModel } from "../models/userModels";
 import UserForm from "../components/UserForm";
+import { toUrl } from "../tools/string";
 
 const LogStep = {
     EMAIL: 0,
@@ -83,8 +84,8 @@ function SignPage() {
             console.log(user);
             
             localStorage.setItem("user_id", user.id);
-            user.name_tag = user.name_tag.replace("#", "%23");
-            navigate("/" + user.name_tag + "/projects");
+            console.log(toUrl(user.name_tag) + "/projects");
+            navigate("/" + toUrl(user.name_tag) + "/projects", {replace: true});
         }
     }
     /** 
@@ -113,7 +114,8 @@ function SignPage() {
             const user = (await result.json());
 
             localStorage.setItem("user_id", user.id);
-            navigate("/" + user.name_tag + "/projects");
+            console.log(toUrl(user.name_tag) + "/projects");
+            navigate("/" + toUrl(user.name_tag) + "/projects", {replace: true});
         }
     }
 

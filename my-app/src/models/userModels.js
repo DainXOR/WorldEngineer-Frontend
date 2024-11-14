@@ -1,27 +1,48 @@
 export class UserModel {
+    /** @type {number} */
     id;
+    /** @type {string} */
     username;
+    /** @type {string} */
+    name_tag
+    /** @type {string} */
     email;
+    /** @type {number} */
     idStatus;
 
-    of(id, username, email, idStatus) {
-        if (id === undefined || id === null) {
-            throw new Error("id is required");
+    /**	Create a new UserModel
+     * @param {string} id
+     * @param {string} username
+     * @param {string} email
+     * @param {string} idStatus
+     * 
+     * @returns {UserModel}
+     */
+    static of(id, username, name_tag, email, idStatus) {
+        if (typeof(id) !== "number") {
+            throw new Error("id is a required to be a number");
         }
-        if (username === undefined || username === null) {
-            throw new Error("username is required");
+        if (typeof(username) !== "string") {
+            throw new Error("username is required to be a string");
         }
-        if (email === undefined || email === null) {
-            throw new Error("email is required");
+        if (typeof(name_tag) !== "string") {
+            throw new Error("name_tag is required to be a string");
         }
-        if (idStatus === undefined || idStatus === null) {
-            throw new Error("idStatus is required");
+        if (typeof(email) !== "string") {
+            throw new Error("email is required to be a string");
+        }
+        if (typeof(idStatus) !== "number") {
+            throw new Error("idStatus is required to be a number");
         }
         
-        this.id = id;
-        this.username = username;
-        this.email = email;
-        this.idStatus = idStatus;
+        let newUser = new UserModel();
+        newUser.id = id;
+        newUser.username = username;
+        newUser.name_tag = name_tag;
+        newUser.email = email;
+        newUser.idStatus = idStatus;
+
+        return newUser;
     }
 }
 
@@ -30,15 +51,22 @@ export class UserCreate {
     name_tag;
 	email;
 
+    /**	Create a new UserCreate
+     * @param {string} username
+     * @param {string} name_tag
+     * @param {string} email
+     * 
+     * @returns {UserCreate}
+     */
     static of(username, name_tag, email) {
-        if (username === undefined || username === null) {
-            throw new Error("username is required");
+        if (typeof(username) !== "string") {
+            throw new Error("username is required to be a string");
         }
-        if (name_tag === undefined || name_tag === null) {
-            throw new Error("name_tag is required");
+        if (typeof(name_tag) !== "string") {
+            throw new Error("name_tag is required to be a string");
         }
-        if (email === undefined || email === null) {
-            throw new Error("email is required");
+        if (typeof(email) !== "string") {
+            throw new Error("email is required to be a string");
         }
         
         let user = new UserCreate();
@@ -55,19 +83,29 @@ export class UserUpdate {
     email;
     idStatus;
 
-    of(username, email, idStatus) {
-        if (username === undefined || username === null) {
-            throw new Error("username is required");
+    /**	Create a new UserUpdate
+     * @param {string} username
+     * @param {string} email
+     * @param {number} idStatus
+     * 
+     * @returns {UserUpdate}
+     */
+    static of(username, email, idStatus) {
+        if (typeof(username) !== "string") {
+            throw new Error("username is required to be a string");
         }
-        if (email === undefined || email === null) {
-            throw new Error("email is required");
+        if (typeof(name_tag) !== "string") {
+            throw new Error("email is required to be a string");
         }
-        if (idStatus === undefined || idStatus === null) {
-            throw new Error("idStatus is required");
+        if (typeof(email) !== "string") {
+            throw new Error("idStatus is required to be a number");
         }
         
-        this.username = username;
-        this.email = email;
-        this.idStatus = idStatus;
+        let user = new UserUpdate();
+        user.username = username;
+        user.email = email;
+        user.idStatus = idStatus;
+
+        return user;
     }
 }

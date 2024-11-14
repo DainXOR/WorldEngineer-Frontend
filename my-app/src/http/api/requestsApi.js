@@ -96,6 +96,28 @@ export class api {
         return await this.checkUrl(this.#url);
     }
 
+    /** Format path parameters
+     * @param {string[]} params
+     * @returns {Optional}
+     */
+    static toOptionalPathParams(params) {
+        return Optional.from(() => params.length > 0 ? params : null);
+    }
+    /** Format query parameters
+     * @param {Object} params
+     * @returns {Optional}
+     */
+    static toOptionalQueryParams(params) {
+        return Optional.from(() => !isEmpty(params) > 0 ? params : null);
+    }
+    /** Format body	
+     * @param {Object} body
+     * @returns {Optional}
+     */
+    static toOptionalBody(body) {
+        return Optional.from(() => !isEmpty(body) ? body : null);
+    }
+
     /** Makes a request to the API
      * 
      * @param {string} method
@@ -113,7 +135,7 @@ export class api {
             }
         };
 
-        if (method !== 'GET') {
+        if (method !== 'GET' && method !== 'DELETE') {
             requestJson.body = JSON.stringify(body.getOrDefault({}));
         }
 

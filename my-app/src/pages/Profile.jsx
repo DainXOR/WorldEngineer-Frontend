@@ -1,20 +1,23 @@
 import { createEffect, createResource } from "solid-js";
 
 import NavBarPersonal from '../components/NavBarPersonal';
-import SideBar from '../components/SideBar';
 
 import { UsersApi } from "../http/api/usersApi";
+import { useParams } from "@solidjs/router";
 
 
 function ProfilePage(props) {
+  console.log("Profile Page");
+  
 
-  const path = props.location.pathname;
+  const path = useParams();
   const [user, {mutate, refetch}] = createResource(async () => (await UsersApi.getByID(localStorage.getItem("user_id"))).json());
+
+  console.log("User: ", user());
 
   return (
     <div>
         <NavBarPersonal user={user()} />
-        <SideBar />
         
         <h1>Profile</h1>
         <p>My profile</p>
