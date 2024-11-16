@@ -33,7 +33,6 @@ const Section = {
 }
 
 function ProjectEditorPage(props) {
-    console.log("Project Editor Page");
     const path = useParams();
 
     const [user, {userMutate, userRefetch}] = createResource(async () => (await UsersApi.getByID(localStorage.getItem("user_id"))).json());
@@ -41,8 +40,8 @@ function ProjectEditorPage(props) {
     const [section, setSection] = createSignal(+localStorage.getItem("section") || Section.DASHBOARD);
 
     createEffect(() => {
-        console.log("User: ", user());
-        console.log("Project: ", project());
+        //console.log("User: ", user());
+        //console.log("Project: ", project());
     });
 
     

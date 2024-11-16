@@ -7,9 +7,6 @@ import { useParams } from "@solidjs/router";
 
 
 function ProfilePage(props) {
-  console.log("Profile Page");
-  
-
   const path = useParams();
   const [user, {mutate, refetch}] = createResource(async () => (await UsersApi.getByID(localStorage.getItem("user_id"))).json());
 
